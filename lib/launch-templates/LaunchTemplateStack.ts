@@ -1,13 +1,14 @@
 import * as cdk from "aws-cdk-lib";
 import * as ec2 from "aws-cdk-lib/aws-ec2";
-import * as iam from "aws-cdk-lib/aws-iam";
 import { Construct } from "constructs";
 
 export class LaunchTemplateStack extends cdk.Stack {
   constructor(scope: Construct, id: string, props?: cdk.StackProps) {
     super(scope, id, props);
 
-    const vpc = new ec2.Vpc(this, "VPC");
+    const vpc = ec2.Vpc.fromLookup(this, "DefaultVPC", {
+      isDefault: true,
+    });
 
     const sg1 = new ec2.SecurityGroup(this, "sg1", {
       vpc: vpc,

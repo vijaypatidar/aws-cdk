@@ -2,7 +2,8 @@
 import "source-map-support/register";
 import * as cdk from "aws-cdk-lib";
 import { LaunchTemplateStack } from "../lib/launch-templates/LaunchTemplateStack";
-
+import { RDSStack } from "../lib/databases/RDSStack";
+import { Stage, Stages } from "../lib/constants";
 const env: cdk.Environment = {
   region: "ap-south-1",
   account: "323439077171",
@@ -10,6 +11,18 @@ const env: cdk.Environment = {
 
 const app = new cdk.App();
 
-new LaunchTemplateStack(app, "LaunchTemplateStack", {
-  env: env,
+Stages.forEach((stage) => {
+  console.log(`${stage} : ${stage == Stage.PROD}`);
+  const rdsStack = new RDSStack(app, "RDSStack-" + stage, {
+    env: env,
+    stage: stage,
+  });
+
+  const lt = new LaunchTemplateStack(app, "LaunchTemplateStack-" + stage, {
+    env: env,
+    stage: stage,
+    rdsStack: rdsStack,
+  });
+
+  lt.addDependency(rdsStack);
 });

@@ -1,6 +1,6 @@
 export enum Stage {
-  DEV = "DEV",
-  PROD = "PROD",
+  DEV = "dev",
+  PROD = "prod",
 }
 
 export const Stages: Stage[] = [Stage.DEV, Stage.PROD];

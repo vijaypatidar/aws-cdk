@@ -1,5 +1,9 @@
 import * as cdk from "aws-cdk-lib";
-import { AutoScalingGroup } from "aws-cdk-lib/aws-autoscaling";
+import {
+  AutoScalingGroup,
+  CfnScalingPolicy,
+  UpdatePolicy,
+} from "aws-cdk-lib/aws-autoscaling";
 import * as ec2 from "aws-cdk-lib/aws-ec2";
 import * as iam from "aws-cdk-lib/aws-iam";
 import { Construct } from "constructs";
@@ -39,12 +43,12 @@ export class LaunchTemplateStack extends cdk.Stack {
 
     const instanceType = ec2.InstanceType.of(
       ec2.InstanceClass.T2,
-      ec2.InstanceSize.SMALL
+      ec2.InstanceSize.MICRO
     );
 
     const userData = ec2.UserData.forLinux();
 
-    userData.addCommands("sudo yum install java-17-amazon-corretto-headless");
+    userData.addCommands("sudo yum install stress");
 
     const cogingHelperTemplate = new ec2.LaunchTemplate(
       this,
@@ -65,7 +69,13 @@ export class LaunchTemplateStack extends cdk.Stack {
       maxCapacity: 10,
       minCapacity: 1,
       desiredCapacity: 1,
+      updatePolicy: UpdatePolicy.rollingUpdate(),
       autoScalingGroupName: "CodingHelperScalingGroup" + stage,
+    });
+
+    myAsg.scaleOnCpuUtilization(`scale-policu-${stage}`, {
+      cooldown: cdk.Duration.seconds(300),
+      targetUtilizationPercent: 50,
     });
   }
 }

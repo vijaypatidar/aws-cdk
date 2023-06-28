@@ -3,4 +3,4 @@ export enum Stage {
   PROD = "prod",
 }
 
-export const Stages: Stage[] = [Stage.DEV, Stage.PROD];
+export const Stages: Stage[] = [Stage.DEV];

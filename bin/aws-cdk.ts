@@ -12,17 +12,13 @@ const env: cdk.Environment = {
 const app = new cdk.App();
 
 Stages.forEach((stage) => {
-  console.log(`${stage} : ${stage == Stage.PROD}`);
-  const rdsStack = new RDSStack(app, "RDSStack-" + stage, {
-    env: env,
-    stage: stage,
-  });
+  // const rdsStack = new RDSStack(app, "RDSStack-" + stage, {
+  //   env: env,
+  //   stage: stage,
+  // });
 
   const lt = new LaunchTemplateStack(app, "LaunchTemplateStack-" + stage, {
     env: env,
     stage: stage,
-    rdsStack: rdsStack,
   });
-
-  lt.addDependency(rdsStack);
 });

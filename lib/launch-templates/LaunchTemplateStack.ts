@@ -73,7 +73,7 @@ export class LaunchTemplateStack extends cdk.Stack {
       autoScalingGroupName: "CodingHelperScalingGroup" + stage,
     });
 
-    myAsg.scaleOnCpuUtilization(`scale-policu-${stage}`, {
+    myAsg.scaleOnCpuUtilization(`scale-policy-${stage}`, {
       cooldown: cdk.Duration.seconds(300),
       targetUtilizationPercent: 50,
     });
